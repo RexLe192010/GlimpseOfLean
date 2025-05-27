@@ -88,7 +88,15 @@ symbol you can put your mouse cursor above the symbol and wait for one second.
 -/
 
 example (f g : ℝ → ℝ) (hf : even_fun f) : even_fun (g ∘ f) := by
-  sorry
+  -- We need to prove ∀ x, (g ∘ f) (-x) = (g ∘ f) x
+  unfold even_fun
+  -- Let x be any real number
+  intro x
+  -- and let's compute
+  calc
+    (g ∘ f) (-x) = g (f (-x)) := by rfl
+               _ = g (f x)     := by rw [hf x]
+               _ = (g ∘ f) x   := by rfl
 
 /-
 Let's have more quantifiers, and play with forward and backward reasoning.
@@ -156,7 +164,11 @@ example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_decreasing g) :
 
 example (f g : ℝ → ℝ) (hf : non_decreasing f) (hg : non_increasing g) :
     non_increasing (g ∘ f) := by
-  sorry
+  -- use backward reasoning
+  intro x₁ x₂ h
+  apply hg
+  apply hf
+  exact h
 
 /- # Finding lemmas
 
@@ -170,7 +182,8 @@ The following exercises teach you two techniques to avoid needing to remember na
 /- Use `simp` to prove the following. Note that `X : Set ℝ`
 means that `X` is a set containing (only) real numbers. -/
 example (x : ℝ) (X Y : Set ℝ) (hx : x ∈ X) : x ∈ (X ∩ Y) ∪ (X \ Y) := by
-  sorry
+  simp
+  exact hx
 
 /- Use `apply?` to find the lemma that every continuous function with compact support
 has a global minimum. You can click on the suggestion that appears to replace
@@ -178,7 +191,7 @@ has a global minimum. You can click on the suggestion that appears to replace
 -/
 
 example (f : ℝ → ℝ) (hf : Continuous f) (h2f : HasCompactSupport f) : ∃ x, ∀ y, f x ≤ f y := by
-  sorry
+  exact Continuous.exists_forall_le_of_hasCompactSupport hf h2f
 
 /-
 Note that `apply?` does not only suggest full proofs. It can suggest lemmas that
@@ -224,4 +237,3 @@ You can start with specialized files in the `Topics` folder. You have choice bet
   It ends with a constructor of the product topology and its universal property
   manipulating as few open sets as possible.
 -/
-
