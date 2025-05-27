@@ -1,3 +1,6 @@
+# Note
+This repo is cloned from https://github.com/PatrickMassot/GlimpseOfLean/tree/master.
+
 # A glimpse of Lean
 
 This repository is an introduction to theorem proving in Lean for the impatient.
